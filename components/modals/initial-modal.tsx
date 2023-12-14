@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 import {
   Dialog,
@@ -35,11 +37,12 @@ const formSchema = z.object({
 });
 
 export const InitialModal = () => {
-  const [isMounted, setIsMounted] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);//used to pass hydration error
+  const router = useRouter();
 
   useEffect(() => {
     setIsMounted(true);
-  }, []);
+  }, []);//used to pass hydration error
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -50,13 +53,21 @@ export const InitialModal = () => {
   });
 
   const isLoading = form.formState.isSubmitting;
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    try {
+      await axios.post("/api/servers", values);
+      form.reset();
+      router.refresh();
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   if (!isMounted) {
     return null;
-  }
+  }//used to pass hydration error
 
   return (
     <Dialog open>
