@@ -3,7 +3,7 @@
 import { Plus } from "lucide-react";
 import { ActionTooltip } from "@/components/action-tooltip";
 
-const NavigationAction = () => {
+export const NavigationAction = () => {
   return (
     <div>
       <ActionTooltip 
@@ -27,4 +27,3 @@ const NavigationAction = () => {
   );
 };
 
-export default NavigationAction;
