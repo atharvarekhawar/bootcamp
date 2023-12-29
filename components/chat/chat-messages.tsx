@@ -6,11 +6,11 @@ import { Member, Message, Profile } from "@prisma/client";
 import { Loader2, ServerCrash } from "lucide-react";
 
 import { useChatQuery } from "@/hooks/use-chat-query";
-// import { useChatSocket } from "@/hooks/use-chat-socket";
-// import { useChatScroll } from "@/hooks/use-chat-scroll";
+import { useChatSocket } from "@/hooks/use-chat-socket";
+import { useChatScroll } from "@/hooks/use-chat-scroll";
 
 import { ChatWelcome } from "./chat-welcome";
- import { ChatItem } from "./chat-item";
+import { ChatItem } from "./chat-item";
 
 const DATE_FORMAT = "d MMM yyyy, HH:mm";
 
@@ -47,8 +47,8 @@ export const ChatMessages = ({
   const addKey = `chat:${chatId}:messages`;
   const updateKey = `chat:${chatId}:messages:update` 
 
-//   const chatRef = useRef<ElementRef<"div">>(null);
-//   const bottomRef = useRef<ElementRef<"div">>(null);
+  const chatRef = useRef<ElementRef<"div">>(null);
+  const bottomRef = useRef<ElementRef<"div">>(null);
 
   const {
     data,
@@ -62,14 +62,14 @@ export const ChatMessages = ({
     paramKey,
     paramValue,
   });
-//   useChatSocket({ queryKey, addKey, updateKey });
-//   useChatScroll({
-//     chatRef,
-//     bottomRef,
-//     loadMore: fetchNextPage,
-//     shouldLoadMore: !isFetchingNextPage && !!hasNextPage,
-//     count: data?.pages?.[0]?.items?.length ?? 0,
-//   })
+  useChatSocket({ queryKey, addKey, updateKey });
+  useChatScroll({
+    chatRef,
+    bottomRef,
+    loadMore: fetchNextPage,
+    shouldLoadMore: !isFetchingNextPage && !!hasNextPage,
+    count: data?.pages?.[0]?.items?.length ?? 0,
+  })
 
   if (status === "loading") {
     return (
@@ -94,7 +94,7 @@ export const ChatMessages = ({
   }
 
   return (
-    <div  className="flex-1 flex flex-col py-4 overflow-y-auto">
+    <div ref={chatRef} className="flex-1 flex flex-col py-4 overflow-y-auto">
       {!hasNextPage && <div className="flex-1" />}
       {!hasNextPage && (
         <ChatWelcome
@@ -137,7 +137,7 @@ export const ChatMessages = ({
           </Fragment>
         ))}
       </div>
-      <div  />
+      <div ref={bottomRef} />
     </div>
   )
 }
