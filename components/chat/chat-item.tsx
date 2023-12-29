@@ -234,7 +234,7 @@ export const ChatItem = ({
           )}
           <ActionTooltip label="Delete">
             <Trash
-              onClick={() => onOpen("messageFile", { 
+              onClick={() => onOpen("deleteMessage", { 
                 apiUrl: `${socketUrl}/${id}`,
                 query: socketQuery,
                })}
